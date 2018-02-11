@@ -1,0 +1,47 @@
+/* Global Styles */
+* {
+    margin: 0;
+    color: whitesmoke;
+    font-family: "Monaco", monospace;
+    line-height: 5vh;
+    font-size: 100%;
+}
+
+form {
+    position: fixed;
+    bottom: 10vh;
+    left: 10vw;
+}
+
+input {
+    background: transparent;
+    border: none;
+    width: 80vw;
+}
+
+body {
+    background: #222;
+}
+
+.content {
+    height: 40vh;
+    width: 80vw;
+    margin: 30vh 10vw;
+    overflow-y: auto;
+}
+
+.cpu {
+    text-align: left;
+}
+
+.cpu::before {
+    content: "> ";
+}
+
+.user {
+    text-align: right;
+}
+
+.user::after {
+    content: " <";
+}
