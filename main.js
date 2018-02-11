@@ -9,7 +9,18 @@ $(document).ready(function() {
         'Stop messing around already',
         'No wonder we\'re not getting anywhere'
     ];
+    var guesses = 0;
     var guess;
+    function drop() {
+        var height = 0;
+        $('div p').each(function(i, value){
+            height += parseInt($(this).height());
+        });
+
+        height += '';
+
+        $('div').animate({scrollTop: height});
+    }
     
     $('.userInput').prop('disabled', true);
     
@@ -44,16 +55,20 @@ $(document).ready(function() {
                     .addClass('cpu')
                     .text(invalid[Math.floor(Math.random() * invalid.length)])
                 );
+                drop();
             }, t);
         } else {
             guess = Number($('.userInput').val());
+            guesses++;
             if (guess > n) {
+                
                 setTimeout(function() {
                     $('p').last().after(
                     $('<p/>')
                         .addClass('cpu')
                         .text('You aimed too high')
                     );
+                    drop();
                 }, t/2);
             } else if (guess < n) {
                 setTimeout(function() {
@@ -62,6 +77,7 @@ $(document).ready(function() {
                         .addClass('cpu')
                         .text('You aimed too low')
                     );
+                    drop();
                 }, t/2);
             } else {
                 setTimeout(function() {
@@ -70,11 +86,13 @@ $(document).ready(function() {
                         .addClass('cpu')
                         .text('Whoa! You won, nice!')
                     );
+                    drop();
                 }, t/2);
             }
         }
         
         $('.userInput').val('');
-        return false; 
+        drop();
+        return false;
     });
 });

@@ -1,7 +1,7 @@
 /* Global Styles */
 * {
     margin: 0;
-    color: whitesmoke;
+    color: #aaa;
     font-family: "Monaco", monospace;
     line-height: 5vh;
     font-size: 100%;
@@ -14,9 +14,20 @@ form {
 }
 
 input {
+    box-shadow: -8px 10px 0px -8px #444;
     background: transparent;
     border: none;
     width: 80vw;
+    transition: 250ms;
+}
+
+input:disabled {
+    box-shadow: -8px 10px 0px -8px #000;
+}
+
+input:focus {
+    box-shadow: -8px 10px 0px -8px #888;
+    outline: none;
 }
 
 body {
@@ -27,7 +38,7 @@ body {
     height: 40vh;
     width: 80vw;
     margin: 30vh 10vw;
-    overflow-y: auto;
+    overflow: auto;
 }
 
 .cpu {
