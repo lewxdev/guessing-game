@@ -35,9 +35,9 @@ body {
 }
 
 .content {
-    height: 40vh;
+    height: 65vh;
     width: 80vw;
-    margin: 30vh 10vw;
+    margin: 17.5vh 10vw;
     overflow: auto;
 }
 
