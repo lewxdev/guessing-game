@@ -7,6 +7,16 @@
     font-size: 100%;
 }
 
+@keyframes cpu {
+    0%      {opacity: 0; right: 5vw;}
+    100%    {opacity: 1; right: 0;}
+}
+
+@keyframes user {
+    0%      {opacity: 0; left: 5vw;}
+    100%    {opacity: 1; left: 0;}
+}
+
 form {
     position: fixed;
     bottom: 10vh;
@@ -42,7 +52,9 @@ body {
 }
 
 .cpu {
+    position: relative;
     text-align: left;
+    animation: cpu 250ms ease;
 }
 
 .cpu::before {
@@ -50,7 +62,9 @@ body {
 }
 
 .user {
+    position: relative;
     text-align: right;
+    animation: user 250ms ease;
 }
 
 .user::after {
