@@ -43,10 +43,10 @@ $(document).ready(function() {
          'You played ' + rounds + ' games.',
          'Your best score was ' + null + ' guesses.',
          'Good luck at wasting your time, friend!'],
-		['Whoa! You won, nice!',
+	['Whoa! You won, nice!',
          'Guesses: ' + scores[scores.length - 1] + '.',
-		 'Type \'new\' to play again.',
-		 'Type \'end\' to stop wasting time.']
+	 'Type \'new\' to play again.',
+	 'Type \'end\' to stop wasting time.']
     ];
     
     // Auto-scroll function
