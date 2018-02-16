@@ -27,7 +27,17 @@ var t = 1800, // Chat interval (ms)
          'Type \'medium\' to crank up the heat.',
          'Type \'hard\' if you think you can take it.',
          'Type \'hardcore\' if you\'re Chuck Norris\' reincarnate.',
-         'Or, just be square and type \'easy\'.']
+         'Or, just be square and type \'easy\'.'],
+        // 'easy' gamemode response
+        ['Fine Mr. Squaredy-pants, I\'ll turn down the heat...',
+         'Back to 1 to 100.'],
+        // 'medium' gamemode response
+        ['Oooh, alright, I\'ll turn up the heat a bit.',
+         'Let\'s do 1 to 1000.'],
+        // 'hard' gamemode response
+        ['Spicyyyy, let\'s try 1 to 10000.'],
+        // 'hardcore' gamemode response
+        ['Bet, 1 to 100000, GO!']
     ],
 // Initialized values
     gamemode = 0, // Gamemodes (Guessing factor via value)
@@ -99,19 +109,14 @@ $('.form').submit(function() {
              'Guesses: ' + (guesses + 1) + '.',
              'Type \'new\' to play again.',
              'Type \'end\' to stop wasting time.',
-             '(Or switch gamemodes and be super cool)'],
-            ['Fine Mr. Squaredy-pants, I\'ll turn down the heat...',
-             'Back to 1 to 100.'],
-            ['Oooh, alright, I\'ll turn up the heat a bit.',
-             'Let\'s do 1 to 1000.'],
-            ['Spicyyyy, let\'s try 1 to 10000.'],
-            ['Bet, 1 to 100000, GO!']
+             'Or switch gamemodes and be super cool.',
+             '(Just type the gamemode\'s keyword).']
         ];
         // Gamemode evaluation function
         function evaluateAnd(speak, line) {
             n = Math.floor(Math.random() * value[gamemode]) + 1;
             if (speak === null) {
-                dialogue(line,script);
+                dialogue(line,constScript);
             } else if (dialogue === null) {
                 speak('cpu',speak,t);
             }
@@ -121,10 +126,61 @@ $('.form').submit(function() {
 
         speak('user', $('.userInput').val(), null);
 
-        if ((fun === 1 && rounds === 1) || (game === 0 && rounds > 1)) {
+        // Keywords
+        if ($('.userInput').val() === 'new' && game === 0) { // 'new' Keyword
+            guesses = 0; // Number of guesses
+            fun = 1; // Notify keyword typed
+            if (rounds === 1) {
+                dialogue(2, constScript);
+            } else {
+                n = Math.floor(Math.random() * value[gamemode]) + 1;
+                speak('cpu', 'Make me a guess I can\'t refuse',t);
+            }
+        } else if (($('.userInput').val() === 'new' && game === 1)) {
+            speak('cpu','Come on, let\'s finish this game first.',t);
+        } else if ($('.userInput').val() === 'end') { // 'end' Keyword
+            userInput(false);
+            scores.sort(function(a, b) {
+                return a - b;
+            });
+            dialogue(0, script);
+        }
+
+        // Error Handling
+        else if (isNaN($('.userInput').val()) === true && game === 0 && fun !== 1) {
+            speak('cpu', constScript[1][Math.floor(Math.random() * constScript[1].length)], t);
+        } else if (isNaN($('.userInput').val()) === true && game !== 0 && fun !== 1) {
+            speak('cpu', 'Whoops', t);
+        } else if (Number($('.userInput').val()) > value[gamemode] || Number($('.userInput').val()) < 0) {
+            speak('cpu', 'My dude, you\'re out of bounds.', t);
+        } else if (Number.isInteger(Number($('.userInput').val())) === false && isNaN($('.userInput').val()) === false) {
+            speak('cpu', 'Nice try, but that\'s not what I mean.', t);
+        } else if (Number.isInteger(Number($('.userInput').val())) === true) {
+            game = 1; // Ensure game flag
+            guess = Number($('.userInput').val()); // Cache valid guess
+            guesses++; // Increment guesses
+
+            // Logic
+            if (guess > n) { // Guess is too high
+                speak('cpu', 'You aimed too high', t);
+            } else if (guess < n) { // Guess is too low
+                speak('cpu', 'You aimed too low', t);
+            } else { // Guess is on point
+                rounds++; // Add to total games played
+                game = 0; // End current game
+                scores.push(guesses); // Save guess score
+                if (rounds > 1) {  // Conditional results
+                    dialogue(2, script);
+                } else {
+                    dialogue(1, script);
+                }
+            }
+        }
+        
+        if (game === 0 && rounds >= 1) {
             if ($('.userInput').val() === 'easy') {
                 if (rounds === 1) {
-                    speak('cpu','I\'m sorry Dave, I\'m afraid I can\'t let you do that',t);
+                    speak('cpu','I\'m sorry Dave, I\'m afraid I can\'t do that',t);
                 } else {
                     gamemode = 0;
                     evaluateAnd(null, 3);
@@ -138,55 +194,6 @@ $('.form').submit(function() {
             } else if ($('.userInput').val() === 'hardcore') {
                 gamemode = 3;
                 evaluateAnd(null, 6);
-            }
-        } else {
-            // Keywords
-            if ($('.userInput').val() === 'new' && game === 0) { // 'new' Keyword
-                guesses = 0; // Number of guesses
-                fun = 1; // Notify keyword typed
-                if (rounds === 1) {
-                    dialogue(2, constScript);
-                } else {
-                    n = Math.floor(Math.random() * value[gamemode]) + 1
-                    speak('cpu', 'Make me a guess I can\'t refuse',t);
-                }
-            } else if (($('.userInput').val() === 'new' && game === 1)) {
-                speak('cpu','Come on, let\'s finish this game first.',t);
-            } else if ($('.userInput').val() === 'end') { // 'end' Keyword
-                userInput(false);
-                scores.sort(function(a, b) {
-                    return a - b;
-                });
-                dialogue(0, script);
-            }
-
-            // Error Handling
-            else if (isNaN($('.userInput').val()) === true && game === 0) {
-                speak('cpu', constScript[1][Math.floor(Math.random() * constScript[1].length)], t);
-            } else if (isNaN($('.userInput').val()) === true && game !== 0 && fun !== 1) {
-                speak('cpu', 'Whoops', t);
-            } else if (Number($('.userInput').val()) > value[gamemode] || Number($('.userInput').val()) < 0) {
-                speak('cpu', 'My dude, you\'re out of bounds', t);
-            } else {
-                game = 1; // Ensure game flag
-                guess = Number($('.userInput').val()); // Cache valid guess
-                guesses++; // Increment guesses
-
-                // Logic
-                if (guess > n) { // Guess is too high
-                    speak('cpu', 'You aimed too high', t);
-                } else if (guess < n) { // Guess is too low
-                    speak('cpu', 'You aimed too low', t);
-                } else { // Guess is on point
-                    rounds++; // Add to total games played
-                    game = 0; // End current game
-                    scores.push(guesses); // Save guess score
-                    if (rounds > 1) {  // Conditional results
-                        dialogue(2, script);
-                    } else {
-                        dialogue(1, script);
-                    }
-                }
             }
         }
         $('.userInput').val(''); // Empty input

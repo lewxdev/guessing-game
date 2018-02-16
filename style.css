@@ -54,7 +54,7 @@ body {
 .cpu {
     position: relative;
     text-align: left;
-    animation: cpu 250ms ease;
+    animation: cpu 250ms cubic-bezier(0.50, 0.50, 0, 0.95);
 }
 
 .cpu::before {
@@ -64,7 +64,7 @@ body {
 .user {
     position: relative;
     text-align: right;
-    animation: user 250ms ease;
+    animation: user 250ms cubic-bezier(0.50, 0.50, 0, 0.95);
 }
 
 .user::after {
