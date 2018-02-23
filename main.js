@@ -81,7 +81,7 @@ function dialogue(line, place) {
 }
 // userInput function
 function userInput(Boolean) {
-    $('.userInput').prop('disabled', !Boolean);
+    $('input').prop('disabled', !Boolean);
 }
 // Gamemode query end function
 function end() {
@@ -94,8 +94,8 @@ function end() {
 dialogue(0, constScript); // Introduction Dialogue
 
 // On submit function (when enter key is clicked)
-$('.form').submit(function() {
-    if ($('.userInput').val() !== '') {
+$('form').submit(function() {
+    if ($('input').val() !== '') {
         var script = [ // Scripted responses w/ concatenation
             ['Aww, come on, we were just getting started.',
              'You played ' + rounds + ' game(s).',
@@ -124,10 +124,10 @@ $('.form').submit(function() {
             guesses = 0;
         }
 
-        speak('user', $('.userInput').val(), null);
+        speak('user', $('input').val(), null);
 
         // Keywords
-        if ($('.userInput').val() === 'new' && game === 0) { // 'new' Keyword
+        if ($('input').val() === 'new' && game === 0) { // 'new' Keyword
             guesses = 0; // Number of guesses
             fun = 1; // Notify keyword typed
             if (rounds === 1) {
@@ -136,9 +136,9 @@ $('.form').submit(function() {
                 n = Math.floor(Math.random() * value[gamemode]) + 1;
                 speak('cpu', 'Make me a guess I can\'t refuse',t);
             }
-        } else if (($('.userInput').val() === 'new' && game === 1)) {
+        } else if (($('input').val() === 'new' && game === 1)) {
             speak('cpu','Come on, let\'s finish this game first.',t);
-        } else if ($('.userInput').val() === 'end') { // 'end' Keyword
+        } else if ($('input').val() === 'end') { // 'end' Keyword
             userInput(false);
             scores.sort(function(a, b) {
                 return a - b;
@@ -147,17 +147,17 @@ $('.form').submit(function() {
         }
 
         // Error Handling
-        else if (isNaN($('.userInput').val()) === true && game === 0 && fun !== 1) {
+        else if (isNaN($('input').val()) === true && game === 0 && fun !== 1) {
             speak('cpu', constScript[1][Math.floor(Math.random() * constScript[1].length)], t);
-        } else if (isNaN($('.userInput').val()) === true && game !== 0 && fun !== 1) {
+        } else if (isNaN($('input').val()) === true && game !== 0 && fun !== 1) {
             speak('cpu', 'Whoops', t);
-        } else if (Number($('.userInput').val()) > value[gamemode] || Number($('.userInput').val()) < 0) {
+        } else if (Number($('input').val()) > value[gamemode] || Number($('input').val()) < 0) {
             speak('cpu', 'My dude, you\'re out of bounds.', t);
-        } else if (Number.isInteger(Number($('.userInput').val())) === false && isNaN($('.userInput').val()) === false) {
+        } else if (Number.isInteger(Number($('input').val())) === false && isNaN($('input').val()) === false) {
             speak('cpu', 'Nice try, but that\'s not what I mean.', t);
-        } else if (Number.isInteger(Number($('.userInput').val())) === true) {
+        } else if (Number.isInteger(Number($('input').val())) === true) {
             game = 1; // Ensure game flag
-            guess = Number($('.userInput').val()); // Cache valid guess
+            guess = Number($('input').val()); // Cache valid guess
             guesses++; // Increment guesses
 
             // Logic
@@ -178,25 +178,25 @@ $('.form').submit(function() {
         }
         
         if (game === 0 && rounds >= 1) {
-            if ($('.userInput').val() === 'easy') {
+            if ($('input').val() === 'easy') {
                 if (rounds === 1) {
                     speak('cpu','I\'m sorry Dave, I\'m afraid I can\'t do that',t);
                 } else {
                     gamemode = 0;
                     evaluateAnd(null, 3);
                 }
-            } else if ($('.userInput').val() === 'medium') {
+            } else if ($('input').val() === 'medium') {
                 gamemode = 1;
                 evaluateAnd(null, 4);
-            } else if ($('.userInput').val() === 'hard') {
+            } else if ($('input').val() === 'hard') {
                 gamemode = 2;
                 evaluateAnd(null, 5);
-            } else if ($('.userInput').val() === 'hardcore') {
+            } else if ($('input').val() === 'hardcore') {
                 gamemode = 3;
                 evaluateAnd(null, 6);
             }
         }
-        $('.userInput').val(''); // Empty input
+        $('input').val(''); // Empty input
         return false;
     } else {
         return false;
